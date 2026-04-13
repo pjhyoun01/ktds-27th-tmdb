@@ -8,19 +8,15 @@ import com.ktdsuniversity.edu.members.vo.response.SearchResultMVO;
 
 public interface MembersService {
 
-	MembersVO findMemberByEmailAndPassword(LoginVO loginVO);
-
-	List<MembersVO> readAllMember();
-
-	MembersVO readMemberByEmail(String email);
-
-	boolean createMember(RegistVO registVO);
-
-	boolean deleteMemberByEmail(String email);
-	
-	boolean updateMemberByEmail(UpdateVO updateVO);
+	boolean createNewMember(RegistVO registVO);
 
 	MembersVO findMemberByEmail(String email);
-	
-	boolean createNewMember(RegistVO registVO);
+
+	boolean updateMemberByEmail(UpdateVO updateVO);
+
+	boolean deleteMemberByEmail(String email);
+
+	SearchResultMVO findAllMembers();
+
+	MembersVO findMemberByEmailAndPassword(LoginVO loginVO);
 }

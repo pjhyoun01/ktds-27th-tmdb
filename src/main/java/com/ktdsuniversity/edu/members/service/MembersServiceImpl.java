@@ -21,6 +21,56 @@ public class MembersServiceImpl implements MembersService {
 	private MembersDao membersDao;
 
 	@Override
+	public boolean createNewMember(RegistVO registVO) {
+
+		MembersVO membersVO = this.membersDao.selectMemberByEmail(registVO.getEmail());
+		if (membersVO != null) {
+			throw new IllegalArgumentException(registVO.getEmail() + "은 이미 사용 중입니다");
+		}
+
+		String newSalt = SHA256Util.generateSalt();
+		String usersPassword = registVO.getPassword();
+
+		usersPassword = SHA256Util.getEncrypt(usersPassword, newSalt);
+
+		registVO.setSalt(newSalt);
+		registVO.setPassword(usersPassword);
+
+		int insertCount = this.membersDao.insertNewMember(registVO);
+		return insertCount == 1;
+	}
+
+	@Override
+	public MembersVO findMemberByEmail(String email) {
+		MembersVO searchResult = this.membersDao.selectMemberByEmail(email);
+		return searchResult;
+	}
+
+	@Override
+	public boolean updateMemberByEmail(UpdateVO updateVO) {
+		int updateCount = this.membersDao.updateMemberByEmail(updateVO);
+		return updateCount == 1;
+	}
+
+	@Override
+	public boolean deleteMemberByEmail(String email) {
+		int deleteCount = this.membersDao.deleteMemberByEmail(email);
+		return deleteCount == 1;
+	}
+
+	@Override
+	public SearchResultMVO findAllMembers() {
+		SearchResultMVO result = new SearchResultMVO();
+
+		int count = this.membersDao.selectCountMember();
+		List<MembersVO> memberList = this.membersDao.selectMemberList();
+		result.setCount(count);
+		result.setResult(memberList);
+
+		return result;
+	}
+
+	@Override
 	public MembersVO findMemberByEmailAndPassword(LoginVO loginVO) {
 		
 		MembersVO searchResult = this.membersDao.selectMemberByEmail(loginVO.getEmail());
@@ -45,53 +95,6 @@ public class MembersServiceImpl implements MembersService {
 	this.membersDao.updateSuccessLogin(loginVO);
 	
 	return searchResult;
-	}
-	
-	@Override
-	public boolean updateMemberByEmail(UpdateVO updateVO) {
-		int updateCount = this.membersDao.updateMemberByEmail(updateVO);
-		return updateCount == 1;
-	}
-
-	@Override
-	public List<MembersVO> readAllMember() {
-		List<MembersVO> memberList = this.membersDao.selectAllMember();
-
-		return memberList;
-	}
-
-	@Override
-	public MembersVO readMemberByEmail(String email) {
-		MembersVO membersVO = this.membersDao.selectMembersByEmail(email);
-
-		return membersVO;
-	}
-
-	@Override
-	public boolean createNewMember(RegistVO registVO) {
-
-		MembersVO membersVO = this.membersDao.selectMemberByEmail(registVO.getEmail());
-		if (membersVO != null) {
-			throw new IllegalArgumentException(registVO.getEmail() + "은 이미 사용 중입니다");
-		}
-
-		String newSalt = SHA256Util.generateSalt();
-		String usersPassword = registVO.getPassword();
-
-		usersPassword = SHA256Util.getEncrypt(usersPassword, newSalt);
-
-		registVO.setSalt(newSalt);
-		registVO.setPassword(usersPassword);
-
-		int insertCount = this.membersDao.insertNewMember(registVO);
-		return insertCount == 1;
-	}
-	
-	@Override
-	public boolean deleteMemberByEmail(String email) {
-		int deleteSuccessCount = this.membersDao.deleteMemerByEmail(email);
-
-		return deleteSuccessCount > 0;
 	}
 	
 

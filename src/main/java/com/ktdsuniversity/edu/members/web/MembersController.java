@@ -21,6 +21,7 @@ import com.ktdsuniversity.edu.members.vo.request.LoginVO;
 import com.ktdsuniversity.edu.members.vo.request.RegistVO;
 import com.ktdsuniversity.edu.members.vo.response.DuplicateResultVO;
 import com.ktdsuniversity.edu.members.vo.response.DuplicateVO;
+import com.ktdsuniversity.edu.members.vo.response.SearchResultMVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -123,6 +124,20 @@ public class MembersController {
 		} else {
 			return "error/404";
 		}
+	}
+	
+	@GetMapping("/member")
+	public String viewListMember(Model model) {
+		SearchResultMVO searchResultM = this.membersService.findAllMembers();
+
+		List<MembersVO> list = searchResultM.getResult();
+
+		int count = searchResultM.getCount();
+
+		model.addAttribute("searchResultM", list);
+		model.addAttribute("searchCountM", count);
+
+		return "members/list";
 	}
 	
 	@GetMapping("/login")
