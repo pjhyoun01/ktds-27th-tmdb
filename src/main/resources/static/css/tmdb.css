@@ -1,0 +1,588 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2rem;
+}
+
+div.validation-error {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+  padding: 0.425rem;
+  border: 1px solid #000;
+}
+
+ul.vertical-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+a.view-link {
+  display: block;
+}
+
+a.view-link:hover {
+  text-decoration: none;
+}
+
+a.view-link:hover > div.view {
+  background-color: #f3f3f3;
+}
+
+a.back-link {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid #000;
+}
+
+a.back-link:hover {
+  background-color: #f3f3f3;
+}
+
+pre {
+  margin: 0;
+  font-size: 1rem;
+}
+
+ul.grid {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  border: 1px solid #000;
+}
+
+ul.grid > li.header > ul.header-item,
+ul.grid > li.body > ul.body-item,
+ul.grid > li.footer > ul.footer-item {
+  display: grid;
+  margin: 0;
+  padding: 0.625rem;
+  list-style-type: none;
+}
+
+ul.grid > li.header > ul.header-item {
+  text-align: center;
+  font-weight: 700;
+}
+
+ul.grid > li.body > ul.body-item > li,
+ul.grid > li.header > ul.header-item > li {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  min-width: 2rem;
+  padding: 0 0.625rem;
+}
+
+ul.grid li.center {
+  text-align: center;
+}
+
+table.grid {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #000;
+}
+
+table.grid > thead > tr > th {
+  padding: 0.625rem;
+}
+
+table.grid > thead > tr > th,
+table.grid > tbody > tr > td {
+  border-right: none;
+  padding: 0.625rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+table.grid > tbody > tr > td > a {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+div.grid {
+  display: grid;
+}
+
+div.grid > div.btn-group {
+  grid-column: 1 / -1;
+}
+
+div.grid > div.btn-group a {
+  display: inline-block;
+  padding: 0.4rem 0.625rem;
+  text-decoration: none;
+}
+
+div.grid > div.btn-group a:hover {
+  text-decoration: underline;
+}
+
+div.grid > div.btn-group > div.right-align {
+  text-align: right;
+}
+
+div.grid > label {
+  padding-left: 0.625rem;
+}
+
+div.grid input,
+div.grid select,
+div.grid button,
+div.grid textarea {
+  padding: 0.625rem;
+}
+
+.total-count {
+  display: inline-block;
+  margin-right: 0.75rem;
+  font-size: 0.95rem;
+}
+
+a.insert-btn {
+  display: inline-block;
+  min-width: 6rem;
+  margin-top: 1rem;
+  margin-right: 0.5rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid #000;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+a.insert-btn:hover {
+  background-color: #f3f3f3;
+  text-decoration: none;
+}
+
+div.insert {
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 0.9rem 1rem;
+  max-width: 58rem;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #000;
+  align-items: start;
+}
+
+div.insert > .input-div,
+div.insert > .attach-file {
+  min-width: 0;
+}
+
+div.insert > .input-div > input,
+div.insert > .input-div > select,
+div.insert > .input-div > textarea,
+div.insert > .attach-file > input,
+div.insert > input,
+div.insert > textarea {
+  width: 100%;
+}
+
+div.insert > textarea {
+  min-height: 12rem;
+  resize: vertical;
+}
+
+div.insert > .btn-group {
+  text-align: right;
+}
+
+div.insert > .btn-group input[type="submit"] {
+  border: 1px solid #000;
+  background: transparent;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+div.insert > .btn-group input[type="submit"]:hover {
+  background-color: #f3f3f3;
+}
+
+ul.articles > li.body > ul.body-item,
+ul.articles > li.header > ul.header-item {
+  grid-template-columns: 11.5rem 1fr minmax(10rem, auto) 4.5rem 11rem 11rem;
+}
+
+div.update {
+  grid-template-columns: 5rem 1fr;
+  grid-template-rows: 1.75rem 1.75rem minmax(1.75rem, auto) 20rem 1fr;
+  row-gap: 0.625rem;
+}
+
+div.write {
+  grid-template-columns: 5rem 1fr;
+  grid-template-rows: repeat(3, minmax(1.75rem, auto)) 20rem 1fr;
+  row-gap: 0.625rem;
+}
+
+div.regist > div.input-div > input,
+div.write > div.input-div > input {
+  width: 100%;
+  display: block;
+}
+
+div.write > div.attach-files,
+div.update > div.attach-files {
+  display: grid;
+  grid-template-columns: 1fr minmax(80px, auto);
+  gap: 0.625rem;
+}
+
+div.update > div.attach-files > ul.vertical-list {
+  grid-column: 1 / -1;
+}
+
+div.update
+  > div.attach-files
+  > ul.vertical-list
+  > li
+  > input[type="checkbox"]:checked
+  + a {
+  text-decoration: line-through;
+}
+
+div.view {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #000;
+}
+
+div.view > .poster-url {
+  flex: 0 0 10rem;
+  aspect-ratio: 2 / 3;
+  align-self: flex-start;
+  border: 1px solid #000;
+  overflow: hidden;
+}
+
+div.view > .poster-url img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+div.view > .movie-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+div.view > .movie-info > .title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+div.view > .movie-info > .movie-meta,
+div.view > .movie-info > .movie-finance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+
+div.view > .movie-info > .introduce {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+div.view > .movie-info > .synopsis {
+  line-height: 1.7;
+}
+
+div.movie-detail {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #000;
+}
+
+div.movie-detail > .movie-detail-top {
+  display: flex;
+  gap: 1rem 1.25rem;
+}
+
+div.movie-detail > .movie-detail-top > .poster-url {
+  border: 1px solid #000;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  flex: 0 0 10rem;
+}
+
+div.movie-detail > .movie-detail-top > .poster-url img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+div.movie-detail > .movie-detail-top > .movie-detail-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+div.movie-detail .content,
+div.movie-detail .content-block {
+  min-width: 0;
+}
+
+div.movie-detail .content {
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+
+div.movie-detail
+  > .movie-detail-top
+  > .movie-detail-info
+  > .content:first-child {
+  font-size: 2rem;
+}
+
+div.movie-detail .content-block {
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+div.movie-detail .make {
+  margin-top: 1rem;
+}
+
+div.movie-detail .staff-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rem;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+div.movie-detail .staff-item {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+div.movie-detail .staff-item > p {
+  margin: 0;
+}
+
+div.movie-detail .staff-item > .name {
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+div.movie-detail .staff-item > .role {
+  color: #666;
+  line-height: 1.4;
+}
+
+div.movie-detail > .movie-detail-bottom {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #000;
+}
+
+div.movie-detail > .movie-detail-bottom > .movie-detail-actor {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+div.movie-detail > .movie-detail-bottom > .movie-detail-make {
+  flex: 0 0 300px;
+  min-width: 300px;
+}
+
+div.movie-detail .section-title {
+  margin-bottom: 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+div.movie-detail .movie-detail-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+div.movie-detail .movie-detail-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+div.movie-detail .movie-detail-meta-item > .meta-label {
+  color: #666;
+}
+
+div.movie-detail .movie-detail-meta-item > .meta-value {
+  line-height: 1.5;
+}
+
+div.movie-detail > .movie-detail-synopsis {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #000;
+}
+
+div.regist {
+  grid-template-columns: 10rem 1fr;
+  gap: 0.9rem 1rem;
+  max-width: 58rem;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #000;
+  align-items: start;
+}
+
+div.regist > label {
+  white-space: nowrap;
+}
+
+div.regist > .input-div {
+  min-width: 0;
+}
+
+div.regist > .input-div > input {
+  width: 100%;
+}
+
+div.regist > .option-row {
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+  min-width: fit-content;
+}
+
+div.regist > .option-row > .check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  white-space: nowrap;
+}
+
+div.regist > .option-row > .check-label > input[type="checkbox"] {
+  margin: 0;
+}
+
+div.regist > .btn-group {
+  text-align: right;
+}
+
+div.regist > .btn-group input[type="submit"] {
+  border: 1px solid #000;
+  background: transparent;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+div.regist > .btn-group input[type="submit"]:hover {
+  background-color: #f3f3f3;
+}
+
+div.member-update {
+  grid-template-columns: 7.5rem 1fr;
+  grid-template-rows: repeat(4, minmax(1.75rem, auto)) 1fr;
+  row-gap: 0.625rem;
+  align-items: center;
+}
+
+div.member-view {
+  grid-template-columns: 7.5rem 1fr;
+  grid-template-rows: repeat(4, minmax(1.75rem, auto)) 1fr;
+  row-gap: 0.625rem;
+  align-items: center;
+}
+
+ul.member-list > li.body > ul.body-item,
+ul.member-list > li.header > ul.header-item {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 720px) {
+  body {
+    padding: 1.25rem 0.9rem 2rem;
+  }
+
+  div.insert {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  div.insert > label {
+    padding-left: 0;
+  }
+
+  div.regist {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  div.regist > label {
+    padding-left: 0;
+  }
+
+  div.view {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  div.view > .poster-url {
+    max-width: 12rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  div.movie-detail > .movie-detail-top {
+    flex-direction: column;
+  }
+
+  div.movie-detail > .movie-detail-top > .poster-url {
+    max-width: 12rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  div.movie-detail > .movie-detail-bottom {
+    flex-direction: column;
+  }
+
+  div.movie-detail > .movie-detail-bottom > .movie-detail-make {
+    flex-basis: auto;
+    min-width: 0;
+    width: 100%;
+  }
+}

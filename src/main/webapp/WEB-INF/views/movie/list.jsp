@@ -1,51 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"  %>
 
-	<jsp:include page="/WEB-INF/views/common/header.jsp">
-		<jsp:param value="TMDB" name="title"/>
-		<jsp:param value="movie/list" name="css"/>
-	</jsp:include>
-	<div class="content">
-		<h2 class="content__title">인기 영화</h2>
-		<div class="content__body">
-			<div class="body__side">
-				<div>
-					<div>정렬</div>
-					<div>></div>
-				</div>
-				<div>
-					<div>볼 수 있는 곳</div>
-					<div>
-						<div>37</div>
-						<div>></div>
-					</div>
-				</div>
-				<div>
-					<div>필터</div>
-					<div>></div>
-				</div>
-				<div class="body__side--search">검색</div>
-			</div>
-			<div class="body__content">
-				<c:forEach items="${movieList}" var="movie">
-					<a href="/movie/view/${movie.movieId}">
-						<div>
-							<div>
-								<img src="/file/${movie.fileGroupId}" alt="${movie.posterUrl}">
-							</div>
-							<div>
-								<div>${movie.title}</div>
-								<c:if test="${not empty movie.openDate}">
-									<div>${movie.openDate}, ${movie.openYear}</div>
-								</c:if>
-							</div>
-						</div>
-					</a>
-				</c:forEach>
-			</div>
-		</div>
-	</div>
-	<div class="footer"></div>
-</body>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/tmdb.css">
+    <title>Movie List</title>
+  </head>
+  <body>
+    <div class="total-count">${totalCount}개 있음</div>
+    <a href="/insert" class="insert-btn">영화 등록</a>
+    <a href="/regist" class="insert-btn">회원 가입</a>
+    <c:if test="${empty searchResult}">
+      <div>등록된 영화가 없습니다.</div>
+    </c:if>
+    <c:forEach var="movie" items="${searchResult}">
+      <a href="/view/${movie.movieId}" class="view-link">
+        <div class="view">
+          <div class="poster-url">
+            <c:if test="${not empty movie.obfuscateName}">
+              <img src="/files/${movie.obfuscateName}">
+            </c:if>
+          </div>
+          <div class="movie-info">
+            <div class="title">${movie.title}</div>
+            <div class="movie-meta">
+              <span class="open-date">${movie.openDate}</span>
+              <span class="running-time">${movie.runningTime} 분</span>
+              <span class="state">${movie.state}</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    </c:forEach>
+  </body>
 </html>

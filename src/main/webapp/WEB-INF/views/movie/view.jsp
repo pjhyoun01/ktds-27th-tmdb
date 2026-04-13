@@ -1,72 +1,81 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/tmdb.css">
+    <title>Movie View</title>
+  </head>
+  <body>
+    <a href="/" class="back-link">목록으로</a>
+    <div class="movie-detail">
+      <div class="movie-detail-top">
+        <div class="poster-url">
+          <c:if test="${not empty movie.obfuscateName}">
+            <img src="/files/${movie.obfuscateName}">
+          </c:if>
+        </div>
+        <div class="movie-detail-info">
+          <div class="content">${movie.title}</div>
+          <div class="content">${movie.openDate} (${movie.openCountry}) / {장르 위치} /${movie.runningTime} 분 </div>
+          <div class="content-block introduce">${movie.introduce}</div>
+          <span class="synopsis-title">개요</span>
+          <div class="content-block sybnopsis-content">${movie.synopsis}</div>
+          <div class="content-block make">
+            <ul class="staff-list">
+              <li class="staff-item">
+                <p class="name">{Director 이름}</p>
+                <p class="role">Director</p>
+              </li>
+              <li class="staff-item">
+                <p class="name">{Writer 이름}</p>
+                <p class="role">Writer</p>
+              </li>
+              <li class="staff-item">
+                <p class="name">{Writer 이름}</p>
+                <p class="role">Writer</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
-	<jsp:include page="/WEB-INF/views/common/header.jsp">
-		<jsp:param value="${movie.title} (${movie.openYear}) - The Movie Database (TMDB)" name="title"/>
-		<jsp:param value="movie/view" name="css"/>
-	</jsp:include>
-	<div class="header__sub">
-		<div>개요</div>
-		<div>미디어</div>
-		<div>팬덤</div>
-		<div>공유</div>
-	</div>
-	<div class="content" style="background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
-					  url(/file/${movie.fileGroupId});">
-		<div class="content__header">
-			<div class="content__header__left">
-				<img src="/file/${movie.fileGroupId}" alt="${movie.posterUrl}">
-			</div>
-			<div class="content__header__right">
-				<div>
-					<div>
-						<div class="movie__title">${movie.title}</div>
-						<div class="movie__openyear">(${movie.openYear})</div>
-					</div>
-					<div>
-						<div class="movie__rate">${movie.movieRating}</div>
-						<div class="movie__opendate">${movie.openDate}
-							<span>(${movie.openCountry})</span>
-						</div>
-						<span>·</span>
-						<div class="movie__genre">
-							<c:choose>
-								<c:when test="${not empty categoryNameList}">
-									<c:forEach items="${categoryNameList}" var="categoryName">
-										${categoryName}
-									</c:forEach>
-								</c:when>
-								<c:otherwise>
-									<div>장르 미정</div>
-								</c:otherwise>
-							</c:choose>
-						</div>
-						<span>·</span>
-						<div class="movie__runningtime">${movie.runningTime}</div>
-					</div>
-				</div>
-				<div>
-					<div>
-						<div class="movie__score">회원 점수</div>
-						<div class="movie__yourvibe">당신의 바이브는 어떤가요?</div>
-					</div>
-					<div>
-						<div>
-						</div>
-						<div class="movie__trailer">트레일러 재생</div>
-					</div>
-				</div>
-				<div>
-					<div class="movie__introduce">
-							${movie.introduce}
-					</div>
-					<div class="synopsis">개요</div>
-					<div class="movie__synopsis">${movie.synopsis}</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="footer"></div>
-</body>
+      <div class="movie-detail-bottom">
+        <div class="movie-detail-actor">
+          <div class="section-title">주요 출연진</div>
+          <div class="actor">
+            <div class="actor-img">{출연진 사진}</div>
+            <div class="actor-name">{출연진 이름}</div>
+            <div class="appearance-name">{출연진 배역}</div>
+          </div>
+        </div>
+        <div class="movie-detail-make">
+          <div class="movie-detail-meta">
+            <div class="movie-detail-meta-item">
+              <div class="meta-label">원제</div>
+              <div class="meta-value">${movie.originalTitle}</div>
+            </div>
+            <div class="movie-detail-meta-item">
+              <div class="meta-label">상태</div>
+              <div class="meta-value">${movie.state}</div>
+            </div>
+            <div class="movie-detail-meta-item">
+              <div class="meta-label">원어</div>
+              <div class="meta-value">${movie.language}</div>
+            </div>
+            <div class="movie-detail-meta-item">
+              <div class="meta-label">제작비</div>
+              <div class="meta-value">$${movie.budget}</div>
+            </div>
+            <div class="movie-detail-meta-item">
+              <div class="meta-label">수익</div>
+              <div class="meta-value">$${movie.profit}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
