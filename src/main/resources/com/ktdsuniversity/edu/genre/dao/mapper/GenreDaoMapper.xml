@@ -3,16 +3,6 @@
 	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktdsuniversity.edu.genre.dao.GenreDao">
 
-	<select id="selectAllGenreByMovieId"
-			parameterType="string"
-			resultType="com.ktdsuniversity.edu.genre.vo.GenreVO">
-		SELECT C.CATEGORY_NAME 
-		  FROM GENRE G
-		 INNER JOIN CATEGORY C
-			ON G.CATEGORY_ID = C.CATEGORY_ID
-		 WHERE MOVIE_ID = 'MV-20260227-000001'
-	</select>
-
 	<insert id="insertGenre"
 			parameterType="com.ktdsuniversity.edu.genre.vo.GenreVO">
 		INSERT INTO GENRE
@@ -24,5 +14,11 @@
 		, #{movieId}
 		, #{categoryId})
 	</insert>
+	<select id="selectAllGenre" 
+		resultType="com.ktdsuniversity.edu.genre.vo.GenreVO">
+		SELECT CATEGORY_ID
+  			 , CATEGORY_NAME
+  		  FROM CATEGORY
+</select>
 
 </mapper>

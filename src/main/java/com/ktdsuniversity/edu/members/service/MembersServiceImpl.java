@@ -1,18 +1,18 @@
 package com.ktdsuniversity.edu.members.service;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ktdsuniversity.edu.common.utils.SHA256Util;
+import com.ktdsuniversity.edu.exceptions.HelloSpringException;
+import com.ktdsuniversity.edu.helper.SHA256Util;
 import com.ktdsuniversity.edu.members.dao.MembersDao;
 import com.ktdsuniversity.edu.members.vo.MembersVO;
 import com.ktdsuniversity.edu.members.vo.request.LoginVO;
 import com.ktdsuniversity.edu.members.vo.request.RegistVO;
+import com.ktdsuniversity.edu.members.vo.request.UpdateVO;
+import com.ktdsuniversity.edu.members.vo.response.SearchResultMVO;
 
 @Service
 public class MembersServiceImpl implements MembersService {
@@ -21,82 +21,81 @@ public class MembersServiceImpl implements MembersService {
 	private MembersDao membersDao;
 
 	@Override
-	public MembersVO readMemberByEmailAndPassword(LoginVO loginVO) {
-		MembersVO loginUser = this.membersDao.selectMembersByEmail(loginVO.getEmail());
-		if (loginUser == null) {
-			throw new IllegalArgumentException("이메일 또는 비밀번호가 틀렸습니다.");
+	public boolean createNewMember(RegistVO registVO) {
+
+		MembersVO membersVO = this.membersDao.selectMemberByEmail(registVO.getEmail());
+		if (membersVO != null) {
+			throw new IllegalArgumentException(registVO.getEmail() + "은 이미 사용 중입니다");
 		}
 
-		if (loginUser.getBlockYn().equals("Y")) {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss");
-			LocalDateTime latestLoginFailDate = LocalDateTime.parse(loginUser.getLatestLoginFailDate(), formatter);
-			if (latestLoginFailDate.isAfter(LocalDateTime.now().minusMinutes(120))) {
-				this.membersDao.updateBlockN(loginVO.getEmail());
-			}
+		String newSalt = SHA256Util.generateSalt();
+		String usersPassword = registVO.getPassword();
 
-			Duration duration = Duration.between(latestLoginFailDate.plusMinutes(120), LocalDateTime.now());
-			long minutes = duration.toMinutes();
-			if (minutes % 60 == 0) {
-				throw new IllegalArgumentException(minutes + "분 후에 시도해 주세요.");
-			} else {
-				long hour = minutes % 60;
-				minutes /= 60;
-				throw new IllegalArgumentException(hour + "시간 " + minutes + "분 후에 시도해 주세요.");
-			}
-		}
+		usersPassword = SHA256Util.getEncrypt(usersPassword, newSalt);
 
-		String encryptInputPassword = SHA256Util.getEncrypt(loginVO.getPassword(), loginUser.getSalt());
-		if (!encryptInputPassword.equals(loginUser.getPassword())) {
-			this.membersDao.updateLoginFailCountPlusOne(loginVO.getEmail());
+		registVO.setSalt(newSalt);
+		registVO.setPassword(usersPassword);
 
-			this.membersDao.updateBlockY(loginVO.getEmail());
-			throw new IllegalArgumentException("이메일 또는 비밀번호가 틀렸습니다.");
-		}
-
-		this.membersDao.updateLoginSuccess(loginVO);
-
-		return loginUser;
+		int insertCount = this.membersDao.insertNewMember(registVO);
+		return insertCount == 1;
 	}
 
 	@Override
-	public List<MembersVO> readAllMember() {
-		List<MembersVO> memberList = this.membersDao.selectAllMember();
-
-		return memberList;
+	public MembersVO findMemberByEmail(String email) {
+		MembersVO searchResult = this.membersDao.selectMemberByEmail(email);
+		return searchResult;
 	}
 
 	@Override
-	public MembersVO readMemberByEmail(String email) {
-		MembersVO membersVO = this.membersDao.selectMembersByEmail(email);
-
-		return membersVO;
-	}
-
-	@Override
-	public boolean createMember(RegistVO registVO) {
-		if (this.membersDao.selectMembersByEmail(registVO.getEmail()) != null) {
-			throw new IllegalArgumentException("이미 사용중인 이메일입니다.");
-		}
-
-		String salt = SHA256Util.generateSalt();
-		String encryptPassword = SHA256Util.getEncrypt(registVO.getPassword(), salt);
-		String encryptConfirmPassword = SHA256Util.getEncrypt(registVO.getConfirmPassword(), salt);
-
-		int createSuccessCount = 0;
-		if (encryptPassword.equals(encryptConfirmPassword)) {
-			registVO.setPassword(encryptPassword);
-			registVO.setSalt(salt);
-			createSuccessCount = this.membersDao.insertMembers(registVO);
-		}
-
-		return createSuccessCount > 0;
+	public boolean updateMemberByEmail(UpdateVO updateVO) {
+		int updateCount = this.membersDao.updateMemberByEmail(updateVO);
+		return updateCount == 1;
 	}
 
 	@Override
 	public boolean deleteMemberByEmail(String email) {
-		int deleteSuccessCount = this.membersDao.deleteMemerByEmail(email);
-
-		return deleteSuccessCount > 0;
+		int deleteCount = this.membersDao.deleteMemberByEmail(email);
+		return deleteCount == 1;
 	}
+
+	@Override
+	public SearchResultMVO findAllMembers() {
+		SearchResultMVO result = new SearchResultMVO();
+
+		int count = this.membersDao.selectCountMember();
+		List<MembersVO> memberList = this.membersDao.selectMemberList();
+		result.setCount(count);
+		result.setResult(memberList);
+
+		return result;
+	}
+
+	@Override
+	public MembersVO findMemberByEmailAndPassword(LoginVO loginVO) {
+		
+		MembersVO searchResult = this.membersDao.selectMemberByEmail(loginVO.getEmail());
+		
+		if(searchResult == null) {
+			throw new IllegalArgumentException("이메일 또는 비밀번호가 잘못되었습니다");
+		
+	}	
+		String inputPassword = loginVO.getPassword();
+		String storedSalt = searchResult.getSalt();
+		String encryptedPassword = SHA256Util.getEncrypt(inputPassword, storedSalt);
+	
+	if(!encryptedPassword.equals(searchResult.getPassword())) {
+		
+		this.membersDao.updateIncreaseLoginFailCount(loginVO.getEmail());
+		
+		this.membersDao.updateBlock(loginVO.getEmail());
+		
+		throw new HelloSpringException("이메일 또는 비밀번호가 잘못되었습니다", "members/login", loginVO);
+	}
+
+	this.membersDao.updateSuccessLogin(loginVO);
+	
+	return searchResult;
+	}
+	
 
 }

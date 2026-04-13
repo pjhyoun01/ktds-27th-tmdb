@@ -1,45 +1,57 @@
-package com.ktdsuniversity.edu.actor.vo;
+package com.ktdsuniversity.edu.actor.vo.request;
 
 import java.util.List;
 
-import com.ktdsuniversity.edu.appearance.vo.AppearanceVO;
+import org.springframework.web.multipart.MultipartFile;
 
-public class ActorVO {
+import jakarta.validation.constraints.NotEmpty;
+
+
+public class ActorWriteVO {
+	
 	private String actorId;
+	@NotEmpty(message="이름을 입력하세요")
 	private String actorName;
+	@NotEmpty(message="URL을 입력하세요")
 	private String actorProfileUrl;
-	private String fileGroupId;
+	
+	private List<MultipartFile> attachFiles;
 
-	private List<AppearanceVO> appearanceVO;
-
+	
 	public String getActorId() {
 		return this.actorId;
 	}
+
 	public void setActorId(String actorId) {
 		this.actorId = actorId;
 	}
+
 	public String getActorName() {
 		return this.actorName;
 	}
+
 	public void setActorName(String actorName) {
 		this.actorName = actorName;
 	}
+
 	public String getActorProfileUrl() {
 		return this.actorProfileUrl;
 	}
+
 	public void setActorProfileUrl(String actorProfileUrl) {
 		this.actorProfileUrl = actorProfileUrl;
 	}
-	public String getFileGroupId() {
-		return this.fileGroupId;
+
+	public List<MultipartFile> getAttachFiles() {
+		return attachFiles;
 	}
-	public void setFileGroupId(String fileGroupId) {
-		this.fileGroupId = fileGroupId;
+
+	public void setAttachFiles(List<MultipartFile> attachFiles) {
+		this.attachFiles = attachFiles;
 	}
-	public List<AppearanceVO> getAppearanceVO() {
-		return this.appearanceVO;
-	}
-	public void setAppearanceVO(List<AppearanceVO> appearanceVO) {
-		this.appearanceVO = appearanceVO;
-	}
+
+	
+	
+	
+	
 }

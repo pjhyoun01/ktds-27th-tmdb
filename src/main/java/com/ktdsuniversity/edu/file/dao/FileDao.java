@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.ktdsuniversity.edu.file.vo.FilesGroupVO;
 import com.ktdsuniversity.edu.file.vo.request.InsertVO;
+import com.ktdsuniversity.edu.file.vo.request.UploadVO;
 import com.ktdsuniversity.edu.file.vo.response.LoadVO;
 
 @Mapper
@@ -20,5 +21,7 @@ public interface FileDao {
 	boolean deleteFileByFileGroupId(String fileGroupId);
 
 	String selectFilePathByFileGroupId(String id);
+
+	void insertAttachFile(UploadVO uploadVO);
 
 }

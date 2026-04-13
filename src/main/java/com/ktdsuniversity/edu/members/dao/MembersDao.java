@@ -7,23 +7,27 @@ import org.apache.ibatis.annotations.Mapper;
 import com.ktdsuniversity.edu.members.vo.MembersVO;
 import com.ktdsuniversity.edu.members.vo.request.LoginVO;
 import com.ktdsuniversity.edu.members.vo.request.RegistVO;
+import com.ktdsuniversity.edu.members.vo.request.UpdateVO;
 
 @Mapper
 public interface MembersDao {
+	int insertNewMember(RegistVO registVO);
 
-	List<MembersVO> selectAllMember();
+	MembersVO selectMemberByEmail(String email);
 
-	MembersVO selectMembersByEmail(String email);
+	int updateMemberByEmail(UpdateVO updateVO);
 
-	int updateLoginFailCountPlusOne(String email);
+	int deleteMemberByEmail(String email);
 
-	int updateBlockY(String email);
+	int selectCountMember();
 
-	int updateBlockN(String email);
+	List<MembersVO> selectMemberList();
 
-	int updateLoginSuccess(LoginVO loginVO);
+	int updateIncreaseLoginFailCount(String email);
 
-	int insertMembers(RegistVO registVO);
+	int updateBlock(String email);
 
-	int deleteMemerByEmail(String email);
+	int updateSuccessLogin(LoginVO loginVO);
+	
+
 }

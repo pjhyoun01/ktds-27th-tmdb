@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ktdsuniversity.edu.members.service.MembersService;
 import com.ktdsuniversity.edu.members.vo.MembersVO;
 import com.ktdsuniversity.edu.members.vo.request.LoginVO;
 import com.ktdsuniversity.edu.members.vo.request.RegistVO;
+import com.ktdsuniversity.edu.members.vo.response.DuplicateResultVO;
 import com.ktdsuniversity.edu.members.vo.response.DuplicateVO;
+import com.ktdsuniversity.edu.members.vo.response.SearchResultMVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -78,36 +81,38 @@ public class MembersController {
 		return "members/view";
 	}
 
-	@GetMapping("/member/regist")
+	@GetMapping("/regist")
 	public String viewRegistPage() {
 		return "members/regist";
 	}
 
 	@ResponseBody
-	@GetMapping("/member/regist/{email}")
-	public DuplicateVO doCheckDuplicateEmail(@PathVariable String email) {
-		MembersVO membersVO = this.membersService.readMemberByEmail(email);
+	@GetMapping("/regist/check/duplicate/{email}")
+	public DuplicateResultVO doCheckDuplicateEmailAction(@PathVariable String email) {
 
-		DuplicateVO duplicateVO = new DuplicateVO();
-		duplicateVO.setEmail(email);
-		duplicateVO.setDuplicate(membersVO != null);
+		MembersVO membersVO = this.membersService.findMemberByEmail(email);
+		DuplicateResultVO result = new DuplicateResultVO();
 
-		return duplicateVO;
+		result.setEmail(email);
+		result.setDuplicate(membersVO != null);
+
+		return result;
 	}
 
-	@PostMapping("/member/regist")
-	public String doRegist(@Valid @ModelAttribute RegistVO registVO, BindingResult bindingResult, Model model) {
+	@PostMapping("/regist")
+	public String doRegistAction(@Valid @ModelAttribute RegistVO registVO, BindingResult bindingResult, Model model) {
+
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("validError", registVO);
+
+			model.addAttribute("inputData", registVO);
 			return "members/regist";
 		}
 
-		boolean registSuccess = this.membersService.createMember(registVO);
-		if (registSuccess) {
-			return "redirect:/";
-		} else {
-			return "error/404";
-		}
+		boolean createResult = this.membersService.createNewMember(registVO);
+		System.out.println("회원 가입 결과? " + createResult);
+
+		return "redirect:/member";
+
 	}
 
 	@PostMapping("/member/delete")
@@ -119,5 +124,45 @@ public class MembersController {
 		} else {
 			return "error/404";
 		}
+	}
+	
+	@GetMapping("/member")
+	public String viewListMember(Model model) {
+		SearchResultMVO searchResultM = this.membersService.findAllMembers();
+
+		List<MembersVO> list = searchResultM.getResult();
+
+		int count = searchResultM.getCount();
+
+		model.addAttribute("searchResultM", list);
+		model.addAttribute("searchCountM", count);
+
+		return "members/list";
+	}
+	
+	@GetMapping("/login")
+	public String viewLoginPage() {
+		return "members/login";
+	}
+
+	@PostMapping("/login")
+	public String doLoginAction(@Valid @ModelAttribute LoginVO loginVO, BindingResult bindingResult, Model model,
+			@RequestParam(required = false, defaultValue = "/list") String go, HttpServletRequest request) {
+
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("loginData", loginVO);
+			return "members/login";
+		}
+		String userIp = request.getRemoteAddr();
+		loginVO.setIp(userIp);
+
+		MembersVO member = this.membersService.findMemberByEmailAndPassword(loginVO);
+
+		request.getSession().invalidate();
+
+		HttpSession session = request.getSession(true);
+		session.setAttribute("__LOGIN_DATA__", member);
+
+		return "redirect:" + go;
 	}
 }
