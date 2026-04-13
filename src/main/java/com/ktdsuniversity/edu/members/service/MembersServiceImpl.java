@@ -96,6 +96,18 @@ public class MembersServiceImpl implements MembersService {
 	
 	return searchResult;
 	}
+
+	@Override
+	public List<MembersVO> readAllMember() {
+		List<MembersVO> memberList = this.membersDao.seleteAllMember();
+		return memberList;
+	}
+
+	@Override
+	public MembersVO readMemberByEmail(String email) {
+		MembersVO membersVO = this.membersDao.selectMemberByEmail(email);
+		return membersVO;
+	}
 	
 
 }

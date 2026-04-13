@@ -28,6 +28,8 @@ public interface MembersDao {
 	int updateBlock(String email);
 
 	int updateSuccessLogin(LoginVO loginVO);
+
+	List<MembersVO> seleteAllMember();
 	
 
 }
