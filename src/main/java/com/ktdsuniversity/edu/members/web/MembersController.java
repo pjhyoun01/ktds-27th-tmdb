@@ -41,21 +41,24 @@ public class MembersController {
 	}
 
 	@PostMapping("/login")
-	public String doLogin(@Valid @ModelAttribute LoginVO loginVO, BindingResult bindingResult, Model model,
-			HttpServletRequest request) {
+	public String doLoginAction(@Valid @ModelAttribute LoginVO loginVO, BindingResult bindingResult, Model model,
+			@RequestParam(required = false, defaultValue = "/list") String go, HttpServletRequest request) {
+
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("loginData", loginVO);
 			return "members/login";
 		}
-		String ip = request.getRemoteAddr();
-		loginVO.setLatestLoginIp(ip);
+		String userIp = request.getRemoteAddr();
+		loginVO.setIp(userIp);
 
-		MembersVO loginUser = this.membersService.readMemberByEmailAndPassword(loginVO);
+		MembersVO member = this.membersService.findMemberByEmailAndPassword(loginVO);
+
+		request.getSession().invalidate();
 
 		HttpSession session = request.getSession(true);
-		session.setAttribute("__USER__", loginUser);
+		session.setAttribute("__LOGIN_DATA__", member);
 
-		return "redirect:/";
+		return "redirect:" + go;
 	}
 
 	@GetMapping("/logout")
@@ -140,29 +143,5 @@ public class MembersController {
 		return "members/list";
 	}
 	
-	@GetMapping("/login")
-	public String viewLoginPage() {
-		return "members/login";
-	}
-
-	@PostMapping("/login")
-	public String doLoginAction(@Valid @ModelAttribute LoginVO loginVO, BindingResult bindingResult, Model model,
-			@RequestParam(required = false, defaultValue = "/list") String go, HttpServletRequest request) {
-
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("loginData", loginVO);
-			return "members/login";
-		}
-		String userIp = request.getRemoteAddr();
-		loginVO.setIp(userIp);
-
-		MembersVO member = this.membersService.findMemberByEmailAndPassword(loginVO);
-
-		request.getSession().invalidate();
-
-		HttpSession session = request.getSession(true);
-		session.setAttribute("__LOGIN_DATA__", member);
-
-		return "redirect:" + go;
-	}
+	
 }
