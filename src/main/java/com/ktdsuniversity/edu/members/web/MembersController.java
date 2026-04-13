@@ -1,0 +1,123 @@
+package com.ktdsuniversity.edu.members.web;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.ktdsuniversity.edu.members.service.MembersService;
+import com.ktdsuniversity.edu.members.vo.MembersVO;
+import com.ktdsuniversity.edu.members.vo.request.LoginVO;
+import com.ktdsuniversity.edu.members.vo.request.RegistVO;
+import com.ktdsuniversity.edu.members.vo.response.DuplicateVO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
+@Controller
+public class MembersController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MembersController.class);
+
+	@Autowired
+	private MembersService membersService;
+
+	@GetMapping("/login")
+	public String viewLoginPage() {
+		return "members/login";
+	}
+
+	@PostMapping("/login")
+	public String doLogin(@Valid @ModelAttribute LoginVO loginVO, BindingResult bindingResult, Model model,
+			HttpServletRequest request) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("loginData", loginVO);
+			return "members/login";
+		}
+		String ip = request.getRemoteAddr();
+		loginVO.setLatestLoginIp(ip);
+
+		MembersVO loginUser = this.membersService.readMemberByEmailAndPassword(loginVO);
+
+		HttpSession session = request.getSession(true);
+		session.setAttribute("__USER__", loginUser);
+
+		return "redirect:/";
+	}
+
+	@GetMapping("/logout")
+	public String doLogout() {
+		return "redirect:/";
+	}
+
+	@GetMapping("/member/view")
+	public String viewMembers(Model model) {
+		List<MembersVO> memberList = this.membersService.readAllMember();
+
+		model.addAttribute("memberList", memberList);
+
+		return "members/list";
+	}
+
+	@GetMapping("/member/view/{email}")
+	public String viewOneMembers(@PathVariable String email, Model model) {
+		MembersVO membersVO = this.membersService.readMemberByEmail(email);
+
+		model.addAttribute("memberList", membersVO);
+
+		return "members/view";
+	}
+
+	@GetMapping("/member/regist")
+	public String viewRegistPage() {
+		return "members/regist";
+	}
+
+	@ResponseBody
+	@GetMapping("/member/regist/{email}")
+	public DuplicateVO doCheckDuplicateEmail(@PathVariable String email) {
+		MembersVO membersVO = this.membersService.readMemberByEmail(email);
+
+		DuplicateVO duplicateVO = new DuplicateVO();
+		duplicateVO.setEmail(email);
+		duplicateVO.setDuplicate(membersVO != null);
+
+		return duplicateVO;
+	}
+
+	@PostMapping("/member/regist")
+	public String doRegist(@Valid @ModelAttribute RegistVO registVO, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("validError", registVO);
+			return "members/regist";
+		}
+
+		boolean registSuccess = this.membersService.createMember(registVO);
+		if (registSuccess) {
+			return "redirect:/";
+		} else {
+			return "error/404";
+		}
+	}
+
+	@PostMapping("/member/delete")
+	public String deleteMembersByEmail(HttpSession session) {
+		MembersVO loginUser = (MembersVO) session.getAttribute("__USER__");
+		boolean deleteSuccecc = this.membersService.deleteMemberByEmail(loginUser.getEmail());
+		if (deleteSuccecc) {
+			return "redirect:/";
+		} else {
+			return "error/404";
+		}
+	}
+}
