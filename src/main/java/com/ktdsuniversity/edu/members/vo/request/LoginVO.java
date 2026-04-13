@@ -1,10 +1,11 @@
 package com.ktdsuniversity.edu.members.vo.request;
 
 public class LoginVO {
+	
 	private String email;
 	private String password;
-	private String latestLoginIp;
-
+	private String ip;
+	
 	public String getEmail() {
 		return this.email;
 	}
@@ -17,10 +18,13 @@ public class LoginVO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getLatestLoginIp() {
-		return this.latestLoginIp;
+	public String getIp() {
+		return this.ip;
 	}
-	public void setLatestLoginIp(String latestLoginIp) {
-		this.latestLoginIp = latestLoginIp;
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
+	
+	
+
 }

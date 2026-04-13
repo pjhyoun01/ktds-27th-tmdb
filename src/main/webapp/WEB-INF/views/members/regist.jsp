@@ -1,62 +1,82 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+pageEncoding="UTF-8"%> <%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>회원 가입</title>
+    <link rel="stylesheet" type="text/css" href="/css/hello-spring.css" />
+    <script type="text/javascript" src="/js/jquery-4.0.0.slim.min.js"></script>
+    <script type="text/javascript" src="/js/members.js"></script>
+  </head>
+  <body>
+    <h1>회원 가입</h1>
+    <form:form
+      modelAttribute="registVO"
+      method="post"
+      action="/regist"
+      enctype="multipart/form-data"
+    >
+      <div class="grid regist">
+        <label for="email">이메일</label>
+        <div class="input-div">
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="이메일을 입력하세요."
+            value="${inputData.email}"
+          />
+          <form:errors path="email" cssClass="validation-error" element="div" />
+        </div>
 
-	<jsp:include page="/WEB-INF/views/common/header.jsp">
-		<jsp:param value="회원 가입" name="title"/>
-		<jsp:param value="members/regist" name="css"/>
-		<jsp:param value="members/regist" name="script"/>
-	</jsp:include>
-	<div class="content">
-		<div class="form-container">
-			<h1>회원 등록</h1>
-			<form:form modelAttribute="registVO" action="/member/regist" method="post">
-				<div>
-					<div>
-						<label for="email">이메일</label>
-						<form:errors path="email" cssClass="valid__error" element="span" />
-					</div>
-					<input id="email" type="text" name="email" placeholder="이메일을 입력해주세요.">
-				</div>
-				<div>
-					<div>
-						<label for="name">이름</label>
-						<form:errors path="name" cssClass="valid__error" element="span" />
-					</div>
-					<input id="name" type="text" name="name" placeholder="이름을 입력해주세요.">
-				</div>
-				<div>
-					<div>
-						<label for="password">비밀번호</label>
-						<form:errors path="password" cssClass="valid__error" element="span" />
-					</div>
-					<div class="input--password">
-						<input id="password" type="password" name="password" placeholder="비밀번호를 입력해주세요">
-						<label for="view-password">보기</label>
-						<input id="view-password" type="checkbox">
-					</div>
-				</div>
-				<div>
-					<div>
-						<label for="confirm-password">확인 비밀번호</label>
-						<form:errors path="confirmPassword" cssClass="valid__error" element="span" />
-					</div>
-					<div class="input--password">
-						<input id="confirm-password" type="password" name="confirmPassword" placeholder="동일한 비밀번호를 입력해주세요">
-						<label for="view-confirm-password">보기</label>
-						<input id="view-confirm-password" type="checkbox">
-					</div>
-				</div>
-				<div>
-				</div>
-				<div class="button-group">
-					<button type="submit">등록</button>
-					<a href="/" class="btn-cancel">
-						취소
-					</a>
-				</div>
-			</form:form>
-		</div>
-	</div>
-</body>
+        <label for="name">이름</label>
+        <div class="input-div">
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="이름을 입력하세요."
+            value="${inputData.name}"
+          />
+          <form:errors path="name" cssClass="validation-error" element="div" />
+        </div>
+
+        <label for="password">비밀번호</label>
+        <div class="input-div">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="비밀번호를 입력하세요."
+            value="${inputData.password}"
+          />
+          <form:errors
+            path="password"
+            cssClass="validation-error"
+            element="div"
+          />
+        </div>
+         <label for="confirm-password">비밀번호 확인</label>
+         <div class="input-div">
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+          />
+  
+
+
+        <label for="show-password">비밀번호 보기</label>
+        <input type="checkbox" id="show-password" />
+
+        <div class="btn-group">
+          <div class="right-align">
+            <input type="submit" value="등록" />
+          </div>
+        </div>
+      </div>
+    </form:form>
+  </body>
 </html>
