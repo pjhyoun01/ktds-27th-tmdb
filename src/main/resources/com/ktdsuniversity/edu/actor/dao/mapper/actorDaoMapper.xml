@@ -50,19 +50,24 @@
 		 WHERE ACTOR_ID = #{_parameter}
 	</select>
 
-	<insert id="insertActor"
-			parameterType="com.ktdsuniversity.edu.actor.vo.request.InsertVO">
-		INSERT INTO ACTOR
-		( ACTOR_ID
-		, ACTOR_NAME
-		, ACTOR_PROFILE_URL
-		, FILE_GROUP_ID)
-		VALUES
-		( 'AC-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_ACTOR_PK.NEXTVAL, 6, '0')
-		, #{actorName}
-		, #{actorProfileUrl}
-		, #{fileGroupId})
-	</insert>
+    <insert id="insertNewActor"
+        parameterType="com.ktdsuniversity.edu.actor.vo.request.ActorWriteVO">
+        <selectKey order="BEFORE" resultType="string"
+            keyProperty="actorId">
+            SELECT 'AC-'||TO_CHAR(SYSDATE,'YYYYMMDD-')||
+            LPAD(SEQ_ACTOR_PK.NEXTVAL,6,'0')
+            FROM DUAL
+        </selectKey>
+        INSERT INTO TMDB.ACTOR
+        (ACTOR_ID
+        , ACTOR_NAME
+        , ACTOR_PROFILE_Url)
+        VALUES
+        ( #{actorId}
+        , #{actorName}
+        , #{actorProfileUrl})
+
+    </insert>
 
 	<update id="updateActorByActorId"
 			parameterType="com.ktdsuniversity.edu.actor.vo.request.UpdateVO">

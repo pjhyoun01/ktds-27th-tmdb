@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 20px;
+}
+
+.header {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 10px;
+}
+
+h1 {
+	text-align: center;
+}
+
+form {
+	width: 400px;
+	margin: 0 auto;
+	border: 1px solid black;
+	padding: 10px;
+}
+
+label {
+	display: block;
+	margin-top: 10px;
+}
+
+input {
+	width: 100%;
+	margin-top: 5px;
+}
+
+.btn {
+	margin-top: 15px;
+}
+
+.right-align {
+	text-align: right;
+}
+
+.validation-error {
+	color: red;
+}
