@@ -17,6 +17,8 @@ public interface FileDao {
 
 	int insertFile(InsertVO insertVO);
 
-	int deleteFileByFileGroupId(String fileGroupId);
+	boolean deleteFileByFileGroupId(String fileGroupId);
+
+	String selectFilePathByFileGroupId(String id);
 
 }

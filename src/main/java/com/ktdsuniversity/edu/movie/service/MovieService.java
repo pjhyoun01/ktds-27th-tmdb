@@ -19,4 +19,6 @@ public interface MovieService {
 
 	boolean deleteMovieById(String movieId);
 
+	boolean deleteMovieByMovieID(String id);
+
 }

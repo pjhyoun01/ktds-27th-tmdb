@@ -3,6 +3,8 @@ package com.ktdsuniversity.edu.movie.service;
 import java.io.File;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,14 @@ import com.ktdsuniversity.edu.movie.vo.request.InsertVO;
 import com.ktdsuniversity.edu.movie.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.movie.vo.response.MovieListVO;
 import com.ktdsuniversity.edu.movie.vo.response.OneMovieVO;
+import com.ktdsuniversity.edu.movie.web.MovieController;
 
 @Service
 public class MovieServiceImpl implements MovieService {
 
+	private static final Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
+
+	
 	@Autowired
 	private MovieDao movieDao;
 
@@ -85,5 +91,19 @@ public class MovieServiceImpl implements MovieService {
 
 		int deleteSuccessCount = this.movieDao.deleteMovieById(movieId);
 		return deleteSuccessCount == 1;
+	}
+	
+	@Override
+	public boolean deleteMovieByMovieID(String id) {
+		int deleteCount = this.movieDao.deleteMovieById(id);
+		
+		String filePath = this.fileDao.selectFilePathByFileGroupId(id);
+		if (filePath != null) {
+			boolean deleteFileResult = this.fileDao.deleteFileByFileGroupId(id);
+			logger.debug("파일 삭제 성공 ? {}", deleteFileResult);
+			new File(filePath).delete();
+		}
+		
+		return deleteCount == 1;
 	}
 }
