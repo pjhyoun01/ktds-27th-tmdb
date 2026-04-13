@@ -4,7 +4,15 @@ public class GenreVO {
 	private String genreId;
 	private String movieId;
 	private String categoryId;
+	private String categoryName;
+	
 
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 	public String getGenreId() {
 		return this.genreId;
 	}

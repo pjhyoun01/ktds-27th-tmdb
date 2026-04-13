@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.genre.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +9,7 @@ import com.ktdsuniversity.edu.category.vo.CategoryVO;
 import com.ktdsuniversity.edu.genre.dao.GenreDao;
 import com.ktdsuniversity.edu.genre.vo.GenreVO;
 import com.ktdsuniversity.edu.genre.vo.request.InsertVO;
+import com.ktdsuniversity.edu.genre.vo.response.SearchResultVO;
 
 @Service
 public class GenreServiceImpl implements GenreService {
@@ -30,5 +33,13 @@ public class GenreServiceImpl implements GenreService {
 		}
 
 		return insertSuccessCount == insertVO.getCategories().size();
+	}
+	
+	@Override
+	public SearchResultVO readAllGenre() {
+		SearchResultVO result = new SearchResultVO();
+		List<GenreVO> list = this.genreDao.selectAllGenre();
+		result.setResult(list);
+		return result;
 	}
 }
