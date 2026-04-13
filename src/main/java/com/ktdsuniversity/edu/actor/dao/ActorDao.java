@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ktdsuniversity.edu.actor.vo.ActorVO;
+import com.ktdsuniversity.edu.actor.vo.request.ActorWriteVO;
 import com.ktdsuniversity.edu.actor.vo.request.InsertVO;
 import com.ktdsuniversity.edu.actor.vo.request.UpdateVO;
 
@@ -22,5 +23,7 @@ public interface ActorDao {
 	int updateActorByActorId(UpdateVO updateVO);
 
 	int deleteActorByActorId(String actorId);
+
+	int insertNewActor(ActorWriteVO actorWriteVO);
 
 }
