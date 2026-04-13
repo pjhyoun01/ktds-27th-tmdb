@@ -2,18 +2,18 @@ package com.ktdsuniversity.edu.members.vo.response;
 
 public class DuplicateVO {
 	private String email;
-	private Boolean duplicate;
-
+	private boolean duplicate;
+	
 	public String getEmail() {
 		return this.email;
 	}
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Boolean getDuplicate() {
+	public boolean isDuplicate() {
 		return this.duplicate;
 	}
-	public void setDuplicate(Boolean duplicate) {
+	public void setDuplicate(boolean duplicate) {
 		this.duplicate = duplicate;
 	}
 }

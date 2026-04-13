@@ -11,6 +11,14 @@ import com.ktdsuniversity.edu.members.vo.request.UpdateVO;
 
 @Mapper
 public interface MembersDao {
+	int insertNewMember(RegistVO registVO);
+
+	MembersVO selectMemberByEmail(String email);
+
+	int updateMemberByEmail(UpdateVO updateVO);
+
+	int deleteMemberByEmail(String email);
+
 	int selectCountMember();
 
 	List<MembersVO> selectMemberList();
@@ -20,14 +28,6 @@ public interface MembersDao {
 	int updateBlock(String email);
 
 	int updateSuccessLogin(LoginVO loginVO);
-
-	int deleteMemerByEmail(String email);
-	
-	int insertNewMember(RegistVO registVO);
-
-	MembersVO selectMemberByEmail(String email);
-
-	int updateMemberByEmail(UpdateVO updateVO);
 	
 
 }

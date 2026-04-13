@@ -44,7 +44,7 @@
          WHERE EMAIL=#{_parameter}
     </select>
 
-	 <update id="updateMemberByEmail"
+    <update id="updateMemberByEmail"
         parameterType="com.ktdsuniversity.edu.members.vo.request.UpdateVO">
         UPDATE MEMBERS
         SET NAME=#{name}
@@ -52,7 +52,24 @@
         WHERE EMAIL = #{email}
     </update>
 
-	<update id="updateIncreaseLoginFailCount"
+    <delete id="deleteMemberByEmail" parameterType="string">
+        DELETE MEMBERS
+        WHERE EMAIL = #{_parameter}
+    </delete>
+
+    <select id="selectMemberList"
+        resultType="com.ktdsuniversity.edu.members.vo.MembersVO">
+        SELECT EMAIL
+        , NAME
+        , PASSWORD
+        FROM MEMBERS
+    </select>
+    <select id="selectCountMember" resultType="_int">
+        SELECT COUNT(EMAIL)
+        FROM MEMBERS
+    </select>
+    
+    <update id="updateIncreaseLoginFailCount"
             parameterType="string">
          UPDATE MEMBERS
             SET LOGIN_FAIL_COUNT = LOGIN_FAIL_COUNT + 1
@@ -78,40 +95,5 @@
               , BLOCK_YN ='N'
           WHERE EMAIL = #{email}
     </update>
-
-	<update id="updateLoginSuccess"
-			parameterType="com.ktdsuniversity.edu.members.vo.request.LoginVO">
-		UPDATE MEMBERS
-		   SET LOGIN_DATE = SYSDATE
-			 , LATEST_LOGIN_IP #{latestLoginIp}
-			 , LOGIN_FAIL_COUNT = 0
-			 , LATEST_LOGIN_FAIL_DATE = NULL
-		 WHERE EMAIL = #{email}
-	</update>
-
-	<insert id="insertMembers"
-			parameterType="com.ktdsuniversity.edu.members.vo.request.RegistVO">
-		INSERT INTO MEMBERS
-		( EMAIL
-		, NAME
-		, PASSWORD
-		, SALT
-		, REGIST_DATE
-		, LATEST_PASSWORD_CHANGE_DATE)
-		VALUES
-		( #{email}
-		, #{name}
-		, #{password}
-		, #{salt}
-		, SYSDATE
-		, SYSDATE)
-	</insert>
-
-	<delete id="deleteMemerByEmail"
-			parameterType="string">
-		DELETE
-		  FROM MEMBERS
-		 WHERE EMAIL = #{_parameter}
-	</delete>
 
 </mapper>
