@@ -2,6 +2,8 @@ package com.ktdsuniversity.edu.movie.web;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ktdsuniversity.edu.actor.service.ActorService;
 import com.ktdsuniversity.edu.actor.vo.ActorVO;
@@ -39,6 +42,8 @@ public class MovieController {
 
 	@Autowired
 	private ActorService actorService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
 
 	@GetMapping("/")
 	public String viewMovieListPage(Model model) {
@@ -108,13 +113,12 @@ public class MovieController {
 		}
 	}
 
-	@PostMapping("/movie/delete/{movieId}")
-	public String doDeleteMovie(@PathVariable String movieId) {
-		boolean deleteSuccess = this.movieService.deleteMovieById(movieId);
-		if (deleteSuccess) {
-			return "redirect:/";
-		} else {
-			return "error/404";
-		}
+	@GetMapping("/delete")
+	public String doDeleteAction(@RequestParam String id, Model model) {
+		
+		boolean deleteResult = this.movieService.deleteMovieByMovieID(id);
+		logger.debug("삭제 결과? {}", deleteResult);
+		
+		return "redirect:/list";
 	}
 }

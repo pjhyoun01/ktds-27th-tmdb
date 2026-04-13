@@ -58,13 +58,22 @@
 		, #{filePath})
 	</insert>
 
-	<delete id="deleteFileByFileGroupId"
-			parameterType="string">
-		DELETE
-		  FROM FILES
-		 WHERE FILE_GROUP_ID = #{_parameter}
-	</delete>
 
+
+    <select id="selectFilePathByFileGroupId"
+            parameterType="string"
+            resultType="string">
+     SELECT FILE_PATH
+       FROM FILES
+      WHERE FILE_GROUP_ID = #{fileGroupId}
+    </select>
+    
+    <delete id="deleteFileByFileGroupId"
+            parameterType="string">
+     DELETE
+       FROM FILES
+      WHERE FILE_GROUP_ID = #{fileGroupId}
+    </delete>
   <insert id="insertAttachFile"
     parameterType="com.ktdsuniversity.edu.file.vo.request.UploadVO">
     INSERT INTO FILES 

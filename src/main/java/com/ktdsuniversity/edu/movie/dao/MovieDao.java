@@ -20,6 +20,6 @@ public interface MovieDao {
 
 	int updateMovieByMovieId(UpdateVO updateVO);
 
-	int deleteMovieById(String movieId);
+	int deleteMovieById(String id);
 
 }
